@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """Basemodel of AirBnB"""
 import uuid
-import datetime
-
+from datetime import datetime
+import models
 
 class BaseModel:
     """a documentation of my class:\
@@ -27,10 +27,14 @@ class BaseModel:
         return '[{}]'.format(self.__class__.__name__) + '\
         ({})'.format(self.id) + '{}'.format(self.__dict__)
 
+
     def save(self):
         """updates the public instance attribute updated_at"""
-        self.update_at=datetime.datetime.now()
-        return self.update_at
+        self.updated_at = datetime.now()
+        from models.__init__ import storage
+        storage.save()
+
+
 
     def to_dict(self):
         """returns a dictionary containing all keys/values
@@ -40,3 +44,19 @@ class BaseModel:
         dict_a["update_at"]=self.update_at.isoformat()
         dict_a["__class__"]=self.__class__.__name__
         return dict_a
+
+
+
+
+    def reload(self):
+        """ deserialize the file json
+        with load y and returns to make
+        a update with all objects
+        """
+        filename = FileStorage.__file_path
+        if path.exists(filename):
+            with open(filename, "r") as f:
+                load = json.load(f)
+            for k, v in load.items():
+                suma = eval(v["__class__"])(**v)
+                FileStorage.__objects[k] = suma
