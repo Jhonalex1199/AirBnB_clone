@@ -17,7 +17,7 @@ class BaseModel:
 
         self.id = str(uuid.uuid4())
         self.created_at = datetime.now()
-        self.update_at = created_at
+        self.update_at = datetime.now()
         from models.__init__ import storage
         storage.new(self)
 
