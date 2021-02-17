@@ -22,7 +22,8 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def emptyline(self):
-        """shouldn’t execute anything
-        """
+        """shouldn’t execute anything"""
         pass
 
+if __name__ == '__main__':
+    HBNBCommand().cmdloop()
