@@ -13,21 +13,21 @@ from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
-    """ Command line main module """
+    """ Command args main module """
     classes = ['BaseModel', 'User', 'City', 'State\
                 ', 'Place', 'Amenity', 'Review']
     prompt = '(hbnb) '
 
     def do_quit(self, args):
-        """Quit coomand line"""
+        """Quit coomand args"""
         return True
 
     def emptyline(self):
-        """ Empty Line """
+        """ Empty args """
         pass
 
     def do_EOF(self, args):
-        """ EOF - press C^d to quit commnad line """
+        """ EOF - press C^d to quit commnad args """
         print("")
         return True
 
@@ -38,7 +38,7 @@ class HBNBCommand(cmd.Cmd):
         """
         if not args:
             print("** class name missing **")
-        elif args not in classes:
+        elif args not in self.classes:
             print("** class doesn't exist **")
         else:
             new_instance = eval(args)()
@@ -47,24 +47,20 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, args):
         '''Print the object with id specified and his dictionary'''
+        new_list = args.split()
         if not args:
-            print('** class name missing **')
+            print("** class name missing **")
+        elif new_list[0] not in self.classes:
+            print("** class doesn't exist **")
+        elif len(new_list) < 2:
+            print("** instance id missing **")
         else:
-            s = ""
-            for i in args:
-                s += i
-            data = s.split()
-            if data[0] not in self.classes:
-                print("** class doesn't exist **")
+            obj = storage.all()
+            key = new_list[0] + '.' + new_list[1]
+            if key in obj:
+                print(obj[key])
             else:
-                all_objs = storage.all()
-                if len(data) < 2:
-                    print("** instance id missing **")
-                else:
-                    if (data[0] + "." + data[1]) in all_objs:
-                        print(storage.all()[data[0] + "." + data[1]])
-                    else:
-                        print("** no instance found **")
+                print("** no instance found **")
 
     def do_destroy(self, args):
         """ Destroy an instance.
@@ -75,7 +71,7 @@ class HBNBCommand(cmd.Cmd):
         commands = args.split()
         if len(commands) < 1:
             print("** class name missing **")
-        elif commands[0] not in self.classes_list:
+        elif commands[0] not in self.classes:
             print("** class doesn't exist **")
         elif len(commands) < 2:
             print("** instance id missing **")
@@ -99,7 +95,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         else:
             comds = args.split()
-            if comds[0] not in self.classes_list:
+            if comds[0] not in self.classes:
                 print("** class doesn't exist **")
             elif len(comds) < 2:
                 print('** instance id missing **')
@@ -135,7 +131,7 @@ class HBNBCommand(cmd.Cmd):
         2 - all
         3 - <class name>.all()
         """
-        if args not in self.classes_list and len(args) > 0:
+        if args not in self.classes and len(args) > 0:
             print("** class doesn't exist **")
         else:
             instances = storage.all()
@@ -148,19 +144,19 @@ class HBNBCommand(cmd.Cmd):
                     list_instances.append(str(instances[key_id]))
             print(list_instances)
 
-    def default(self, line):
+    def default(self, args):
         """
         Retrieve all instances of a class by using: <class name>.all().
         """
-        if '.' not in line:
-            print("*** Unknown syntax: " + line)
+        if '.' not in args:
+            print("*** Unknown syntax: " + args)
             return
         No_commands = {"all()": self.do_all, "count()": self.do_count}
-        args = line.split(".")
-        if args[0] not in self.classes_list:
-            print("*** Unknown syntax: " + line)
+        args = args.split(".")
+        if args[0] not in self.classes:
+            print("*** Unknown syntax: " + args)
         elif len(args) != 2:
-            print("*** Unknown syntax: " + line)
+            print("*** Unknown syntax: " + args)
         else:
             if args[1] in No_commands:
                 No_commands[args[1]](args[0])
