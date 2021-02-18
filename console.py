@@ -1,7 +1,8 @@
 #!/usr/bin/python3
-"""contains the entry point of the command interpreter"""
+""" Import Modules
+    Hint ---> list of libraries code to be use
+"""
 import cmd
-import json
 from models.base_model import BaseModel
 from models import storage
 from models.user import User
@@ -20,21 +21,23 @@ class HBNBCommand(cmd.Cmd):
                     'State', 'Place', 'Amenity', 'Review']
     prompt = '(hbnb) '
 
-
-    def do_quit(self, line):
-        """Quit command to exit the program"""
-        return True
-
-    def do_EOF(self, line):
-        """Exit the program"""
-        print("")
+    def do_quit(self, args):
+        """Quit coomand line
+        Usage:
+        1 - quit
+        """
         return True
 
     def emptyline(self):
-        """shouldn’t execute anything"""
+        " Empty Line "
         pass
 
-  def do_create(self, args):
+    def do_EOF(self, args):
+        """ EOF - press C^d to quit commnad line """
+        print("")
+        return True
+
+    def do_create(self, args):
         """ Create a new instance
         Usage:
         1 - create <class name>
@@ -181,7 +184,5 @@ class HBNBCommand(cmd.Cmd):
                 None_count += 1
         print(None_count)
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     HBNBCommand().cmdloop()
