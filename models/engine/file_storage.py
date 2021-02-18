@@ -8,13 +8,10 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-"""Future models to import in the project"""
 
 
 class FileStorage:
     """ File Storage Class"""
-    """FileStorage that serializes instances to a JSON file"""
-    """and deserializes JSON file to instances"""
     __file_path = "file.json"
     __objects = {}
 
@@ -29,22 +26,20 @@ class FileStorage:
 
     def save(self):
         """ Public instance that serializes __objects """
-        new_dict = {}
-        for key, value in FileStorage.__objects.items():
-            new_dict[key] = value.to_dict()
-
-        with open(FileStorage.__file_path, 'w', encoding="utf-8") as file:
-            data = json.dumps(new_dict)
-            file.write(data)
+        d = {}
+        with open(self.__file_path, 'w+') as f:
+            for k, v in self.__objects.items():
+                d[k] = v.to_dict()
+            json.dump(d, f)
 
     def reload(self):
-        """ Public instance that deserializes JSON to object """
+        """deserializes JSON to object"""
         try:
-            with open(FileStorage.__file_path, 'r', encoding="UTF-8") as file:
-                list_data = json.load(file)
-                for key, value in list_data.items():
-                    FileStorage.__objects[key] = eval(
-                        value['__class__'])(**value)
-                    # State(**vale)
-        except Exception:
-            pass
+            with open(self.__file_path, 'r') as f:
+                new_obj = json.load(f)
+        except FileNotFoundError:
+            return
+        new_dct = {}
+        for key, val in new_obj.items():
+            new_dct[key] = eval(val["__class__"])(**val)
+        self.__objects = new_dct

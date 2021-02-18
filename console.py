@@ -1,7 +1,6 @@
 #!/usr/bin/python3
-""" Import Modules
-    Hint ---> list of libraries code to be use
-"""
+"""Console"""
+import json
 import cmd
 from models.base_model import BaseModel
 from models import storage
@@ -12,24 +11,19 @@ from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
 
-import re
-
 
 class HBNBCommand(cmd.Cmd):
     """ Command line main module """
-    classes_list = ['BaseModel', 'User', 'City',
-                    'State', 'Place', 'Amenity', 'Review']
+    classes = ['BaseModel', 'User', 'City', 'State\
+                ', 'Place', 'Amenity', 'Review']
     prompt = '(hbnb) '
 
     def do_quit(self, args):
-        """Quit coomand line
-        Usage:
-        1 - quit
-        """
+        """Quit coomand line"""
         return True
 
     def emptyline(self):
-        " Empty Line "
+        """ Empty Line """
         pass
 
     def do_EOF(self, args):
@@ -42,9 +36,9 @@ class HBNBCommand(cmd.Cmd):
         Usage:
         1 - create <class name>
         """
-        if len(args) < 1:
+        if not args:
             print("** class name missing **")
-        elif args not in self.classes_list:
+        elif args not in classes:
             print("** class doesn't exist **")
         else:
             new_instance = eval(args)()
@@ -60,7 +54,7 @@ class HBNBCommand(cmd.Cmd):
             for i in args:
                 s += i
             data = s.split()
-            if data[0] not in self.classes_list:
+            if data[0] not in self.classes:
                 print("** class doesn't exist **")
             else:
                 all_objs = storage.all()
@@ -122,7 +116,6 @@ class HBNBCommand(cmd.Cmd):
                     for key_id, obj in instances.items():
                         if key == key_id:
                             value = comds[3].split("\"")
-                            # (i.e) evalue if value turns into list
                             if len(value) > 1:
                                 value = value[1]
                             else:
@@ -130,7 +123,6 @@ class HBNBCommand(cmd.Cmd):
                             if hasattr(obj, comds[2]):
                                 value = type(
                                     getattr(obj, comds[2]))(value)
-                                #  (i.e) int(comds[3])
                             elif value.isdigit() is True:
                                 value = int(value)
                             setattr(obj, comds[2], value)
