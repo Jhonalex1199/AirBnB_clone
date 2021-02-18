@@ -19,4 +19,4 @@ class Place(BaseModel):
     latitude = 0.0
     longitude = 0.0
     amenity_ids = []  # it will be the list of Amenity.id
-© 2021 GitHub, Inc.
+
